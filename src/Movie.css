@@ -1,12 +1,33 @@
 .movie-details {
   display: flex;
+  width: 100%;
   max-width: 960px;
 }
 
 .movie-description {
+  display: flex;
+  flex-direction: column;
   margin-left: 24px;
+  width: 100%;
 }
 
 .movie-description > p {
   margin-top: 12px;
+}
+
+.movie-options {
+  list-style: none;
+  justify-self: flex-end;
+  margin-top: auto;
+  align-self: flex-end;
+  display: flex;
+}
+
+.movie-options > * {
+  margin-left: 8px;
+}
+
+.edit-description {
+  padding: 8px;
+  flex: 1;
 }
