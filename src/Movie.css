@@ -1,0 +1,12 @@
+.movie-details {
+  display: flex;
+  max-width: 960px;
+}
+
+.movie-description {
+  margin-left: 24px;
+}
+
+.movie-description > p {
+  margin-top: 12px;
+}

@@ -1,0 +1,43 @@
+.movies-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.movies-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+}
+
+.movies-selector > * {
+  margin-right: 24px;
+}
+
+.movie-card-poster {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 700;
+  font-size: 92px;
+
+  width: 240px;
+  height: 320px;
+  overflow: hidden;
+
+  color: white;
+  background-color: rebeccapurple;
+
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.hover-effect {
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+
+.hover-effect:hover {
+  transform: scale3d(1.05, 1.05, 1);
+}
