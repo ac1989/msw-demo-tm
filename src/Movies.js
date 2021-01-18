@@ -1,10 +1,11 @@
-import React from 'react'
-import { fetchMovies } from './api/fetchMovies'
-import './Movies.css'
-import { Movie } from './Movie'
+import React from "react";
+import { fetchMovies } from "./api/fetchMovies";
+import "./Movies.css";
+import { Movie } from "./Movie";
+import { useMoviesContext } from "./App";
 
 export function MovieCard({ movie, handleClick }) {
-  const { title, poster } = movie
+  const { title, poster } = movie;
   return (
     <div
       className="movie-card-poster"
@@ -13,66 +14,50 @@ export function MovieCard({ movie, handleClick }) {
     >
       <span>{title}</span>
     </div>
-  )
+  );
 }
 
 export function Movies() {
-  const [selectedMovieIndex, setSelectedMovieIndex] = React.useState(-1)
-  const [{ status, movies }, setState] = React.useState({
-    status: 'loading',
-    movies: null,
-  })
+  const {
+    state: { status, movies, selectedMovie },
+    fetchMovies,
+    selectMovie,
+    updateMovie,
+  } = useMoviesContext();
 
   React.useEffect(() => {
-    fetchMovies().then((movies) => setState({ status: 'success', movies }))
-  }, [])
-
-  function handleMovieUpdate(movie) {
-    const movieIndex = movies.findIndex((item) => item.id === movie.id)
-    setState({
-      status,
-      movies: [
-        ...movies.slice(0, movieIndex),
-        movie,
-        ...movies.slice(movieIndex + 1),
-      ],
-    })
-  }
+    fetchMovies();
+  }, []);
 
   return (
     <div className="movies-page">
-      {status === 'loading' && <p>loading...</p>}
+      {status === "loading" && <p>loading...</p>}
 
-      {status === 'success' && selectedMovieIndex === -1 && (
+      {status === "success" && !selectedMovie && (
         <section className="movies-selector">
           {movies.map((movie, i) => (
             <span className="hover-effect">
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                handleClick={() => setSelectedMovieIndex(i)}
+                handleClick={() => selectMovie(movies[i])}
               />
             </span>
           ))}
         </section>
       )}
 
-      {status === 'success' && selectedMovieIndex >= 0 && (
+      {status === "success" && selectedMovie && (
         <>
           <nav
-            style={{ width: '100%', maxWidth: '960px', marginBottom: '24px' }}
+            style={{ width: "100%", maxWidth: "960px", marginBottom: "24px" }}
           >
-            <button onClick={() => setSelectedMovieIndex(-1)}>
-              {'< Back'}
-            </button>
+            <button onClick={() => selectMovie(null)}>{"< Back"}</button>
           </nav>
 
-          <Movie
-            movie={movies[selectedMovieIndex]}
-            onMovieUpdate={handleMovieUpdate}
-          />
+          <Movie movie={selectedMovie} onMovieUpdate={updateMovie} />
         </>
       )}
     </div>
-  )
+  );
 }
