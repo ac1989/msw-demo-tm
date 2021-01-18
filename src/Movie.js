@@ -1,14 +1,7 @@
 import React from "react";
 import "./Movie.css";
 import { MovieCard } from "./Movies";
-import { postMovie } from "./api/postMovie";
 import { useMoviesContext } from "./App";
-
-function TextAreaInput({ value, onChange }) {
-  return (
-    <textarea className="edit-description" onChange={onChange} value={value} />
-  );
-}
 
 function MovieOptions({ actions }) {
   return (
@@ -49,22 +42,25 @@ export function Movie() {
 
       <div className="movie-description">
         <h2>{title}</h2>
-        <span>Released: {new Date(releaseDate).toLocaleDateString()}</span>
+        <span style={{ marginTop: "4px", color: "rgba(0, 0, 0, 0.6)" }}>
+          Released: {new Date(releaseDate).toLocaleDateString()}
+        </span>
 
         {status === "VIEWING" && (
           <>
             <p>{tagLine}</p>
             <MovieOptions
-              actions={[{ text: "EditDescription", onClick: handleEditClick }]}
+              actions={[{ text: "Edit Description", onClick: handleEditClick }]}
             />
           </>
         )}
 
         {status === "EDITING" && (
           <>
-            <TextAreaInput
-              value={editText}
+            <textarea
+              className="edit-description"
               onChange={(e) => setEditText(e.target.value)}
+              value={editText}
             />
             <MovieOptions
               actions={[
