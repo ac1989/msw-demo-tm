@@ -16,17 +16,33 @@ function MoviesProvider({ children }) {
   }
 
   async function updateMovie(movie) {
-    await api.postMovie(movie);
-    dispatch({ type: "UPDATE_MOVIE", movie });
+    const res = await api.postMovie(movie);
+
+    if (res.status === "ok") {
+      dispatch({ type: "UPDATE_MOVIE", movie });
+    }
+
+    if (res.status !== "ok") {
+      console.log("fail");
+      dispatch({
+        type: "POST_MOVIE_FAILED",
+        movieId: movie.id,
+        error: res.message,
+      });
+    }
   }
 
   function selectMovie(movie) {
     dispatch({ type: "SELECT_MOVIE", movie });
   }
 
+  function clearError(movieId) {
+    dispatch({ type: "CLEAR_ERROR", movieId });
+  }
+
   return (
     <MoviesContext.Provider
-      value={{ state, fetchMovies, selectMovie, updateMovie }}
+      value={{ state, fetchMovies, selectMovie, updateMovie, clearError }}
     >
       {children}
     </MoviesContext.Provider>

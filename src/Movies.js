@@ -1,5 +1,4 @@
 import React from "react";
-import { fetchMovies } from "./api/fetchMovies";
 import "./Movies.css";
 import { Movie } from "./Movie";
 import { useMoviesContext } from "./App";
@@ -36,7 +35,7 @@ export function Movies() {
       {status === "success" && !selectedMovie && (
         <section className="movies-selector">
           {movies.map((movie, i) => (
-            <span className="hover-effect">
+            <span className="hover-effect" key={movie.id}>
               <MovieCard
                 key={movie.id}
                 movie={movie}

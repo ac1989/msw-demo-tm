@@ -1,5 +1,6 @@
 export const initialState = {
   status: "loading",
+  errors: null,
   movies: null,
   selectedMovie: null,
 };
@@ -24,6 +25,23 @@ export function reducer(state, action = {}) {
       return {
         ...state,
         selectedMovie: action.movie,
+      };
+    }
+    case "POST_MOVIE_FAILED": {
+      return {
+        ...state,
+        errors: {
+          [action.movieId]: { error: action.error },
+        },
+      };
+    }
+    case "CLEAR_ERROR": {
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          [action.movieId]: null,
+        },
       };
     }
     case "UPDATE_MOVIE": {

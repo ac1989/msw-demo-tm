@@ -7,19 +7,27 @@ function MovieOptions({ actions }) {
   return (
     <ul className="movie-options">
       {actions.map((action) => (
-        <button onClick={action.onClick}>{action.text}</button>
+        <button onClick={action.onClick} key={action.text}>
+          {action.text}
+        </button>
       ))}
     </ul>
   );
 }
 
 export function Movie() {
-  const { state, updateMovie } = useMoviesContext();
-  const { selectedMovie: movie } = state;
+  const { state, updateMovie, clearError } = useMoviesContext();
+  const { selectedMovie: movie, errors } = state;
   const { releaseDate, title, tagLine } = movie;
 
   const [status, setStatus] = React.useState("VIEWING");
   const [editText, setEditText] = React.useState(tagLine);
+
+  React.useEffect(() => {
+    if (errors && errors[movie.id]) {
+      setStatus("ERROR");
+    }
+  }, [errors]);
 
   async function saveMovie() {
     setStatus("SAVING");
@@ -45,6 +53,22 @@ export function Movie() {
         <span style={{ marginTop: "4px", color: "rgba(0, 0, 0, 0.6)" }}>
           Released: {new Date(releaseDate).toLocaleDateString()}
         </span>
+
+        {status === "ERROR" && (
+          <>
+            <h3>
+              Error: {errors[movie.id].error}
+              <button
+                onClick={() => {
+                  setStatus("VIEWING");
+                  clearError(movie.id);
+                }}
+              >
+                ok i'm sorry
+              </button>
+            </h3>
+          </>
+        )}
 
         {status === "VIEWING" && (
           <>
