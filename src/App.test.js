@@ -55,4 +55,7 @@ test("shows error message if saving fails", async () => {
   userEvent.type(screen.getByRole("textbox"), "frick the police.");
 
   fireEvent.click(screen.getByText(/save/i));
+  await waitFor(() =>
+    expect(screen.getByText(/Mind your language/i)).toBeVisible()
+  );
 });

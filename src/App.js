@@ -23,7 +23,6 @@ function MoviesProvider({ children }) {
     }
 
     if (res.status !== "ok") {
-      console.log("fail");
       dispatch({
         type: "POST_MOVIE_FAILED",
         movieId: movie.id,
