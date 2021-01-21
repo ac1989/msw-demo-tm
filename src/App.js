@@ -4,29 +4,28 @@ import { reducer, initialState } from "./App.reducer";
 import { Movies } from "./Movies";
 
 const MoviesContext = React.createContext({});
-export const useMoviesContext = () => React.useContext(MoviesContext);
 
-function MoviesProvider({ children }) {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+export const useMoviesContext = () => {
+  const [state, dispatch] = React.useContext(MoviesContext);
 
-  async function fetchMovies() {
+  const fetchMovies = React.useCallback(async () => {
     dispatch({ type: "FETCH_MOVIES" });
-    const movies = await api.fetchMovies();
+    const { body: movies } = await api.fetchMovies();
     dispatch({ type: "FETCH_MOVIES_SUCCESS", movies });
-  }
+  }, [dispatch]);
 
   async function updateMovie(movie) {
-    const res = await api.postMovie(movie);
+    const { status, body } = await api.postMovie(movie);
 
-    if (res.status === "ok") {
+    if (status === 200) {
       dispatch({ type: "UPDATE_MOVIE", movie });
     }
 
-    if (res.status !== "ok") {
+    if (status !== 200) {
       dispatch({
         type: "POST_MOVIE_FAILED",
         movieId: movie.id,
-        error: res.message,
+        error: body.message,
       });
     }
   }
@@ -39,12 +38,14 @@ function MoviesProvider({ children }) {
     dispatch({ type: "CLEAR_ERROR", movieId });
   }
 
+  return { state, fetchMovies, selectMovie, updateMovie, clearError };
+};
+
+function MoviesProvider({ children }) {
+  const value = React.useReducer(reducer, initialState);
+
   return (
-    <MoviesContext.Provider
-      value={{ state, fetchMovies, selectMovie, updateMovie, clearError }}
-    >
-      {children}
-    </MoviesContext.Provider>
+    <MoviesContext.Provider value={value}>{children}</MoviesContext.Provider>
   );
 }
 

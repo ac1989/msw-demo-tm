@@ -26,7 +26,7 @@ export function Movies() {
 
   React.useEffect(() => {
     fetchMovies();
-  }, []);
+  }, [fetchMovies]);
 
   return (
     <div className="movies-page">
