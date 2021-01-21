@@ -1,56 +1,10 @@
 import React from "react";
-import { Movies } from "./Movies";
 import api from "./api";
+import { reducer, initialState } from "./App.reducer";
+import { Movies } from "./Movies";
 
 const MoviesContext = React.createContext({});
 export const useMoviesContext = () => React.useContext(MoviesContext);
-
-const initialState = {
-  status: "loading",
-  movies: null,
-  selectedMovie: null,
-};
-
-function reducer(state, action = {}) {
-  switch (action.type) {
-    case "FETCH_MOVIES": {
-      return {
-        status: "loading",
-        movies: null,
-        selectedMovie: null,
-      };
-    }
-    case "FETCH_MOVIES_SUCCESS": {
-      return {
-        status: "success",
-        movies: action.movies,
-        selectedMovie: null,
-      };
-    }
-    case "SELECT_MOVIE": {
-      return {
-        ...state,
-        selectedMovie: action.movie,
-      };
-    }
-    case "UPDATE_MOVIE": {
-      const { movie } = action;
-      const { movies } = state;
-      const movieIndex = movies.findIndex((item) => item.id === movie.id);
-      return {
-        ...state,
-        movies: [
-          ...movies.slice(0, movieIndex),
-          movie,
-          ...movies.slice(movieIndex + 1),
-        ],
-        selectedMovie: movie,
-      };
-    }
-    default:
-      return state;
-  }
-}
 
 function MoviesProvider({ children }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -61,18 +15,33 @@ function MoviesProvider({ children }) {
     dispatch({ type: "FETCH_MOVIES_SUCCESS", movies });
   }
 
+  async function updateMovie(movie) {
+    const res = await api.postMovie(movie);
+
+    if (res.status === "ok") {
+      dispatch({ type: "UPDATE_MOVIE", movie });
+    }
+
+    if (res.status !== "ok") {
+      dispatch({
+        type: "POST_MOVIE_FAILED",
+        movieId: movie.id,
+        error: res.message,
+      });
+    }
+  }
+
   function selectMovie(movie) {
     dispatch({ type: "SELECT_MOVIE", movie });
   }
 
-  async function updateMovie(movie) {
-    await api.postMovie(movie);
-    dispatch({ type: "UPDATE_MOVIE", movie });
+  function clearError(movieId) {
+    dispatch({ type: "CLEAR_ERROR", movieId });
   }
 
   return (
     <MoviesContext.Provider
-      value={{ state, fetchMovies, selectMovie, updateMovie }}
+      value={{ state, fetchMovies, selectMovie, updateMovie, clearError }}
     >
       {children}
     </MoviesContext.Provider>
