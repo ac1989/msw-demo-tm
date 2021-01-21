@@ -24,27 +24,32 @@ export function reducer(state, action = {}) {
     case "SELECT_MOVIE": {
       return {
         ...state,
-        selectedMovie: action.movie,
+        selectedMovie: { ...action.movie, status: "viewing" },
       };
     }
-    case "POST_MOVIE_FAILED": {
+    case "DESELECT_MOVIE": {
       return {
         ...state,
-        errors: {
-          [action.movieId]: { error: action.error },
+        selectedMovie: null,
+      };
+    }
+    case "TOGGLE_MOVIE_EDITING": {
+      return {
+        ...state,
+        selectedMovie: {
+          ...state.selectedMovie,
+          status:
+            state.selectedMovie.status === "editing" ? "viewing" : "editing",
         },
       };
     }
-    case "CLEAR_ERROR": {
+    case "POST_MOVIE": {
       return {
         ...state,
-        errors: {
-          ...state.errors,
-          [action.movieId]: null,
-        },
+        selectedMovie: { ...state.selectedMovie, status: "saving" },
       };
     }
-    case "UPDATE_MOVIE": {
+    case "POST_MOVIE_SUCCESS": {
       const { movie } = action;
       const { movies } = state;
       const movieIndex = movies.findIndex((item) => item.id === movie.id);
@@ -55,7 +60,27 @@ export function reducer(state, action = {}) {
           movie,
           ...movies.slice(movieIndex + 1),
         ],
-        selectedMovie: movie,
+        selectedMovie: { ...movie, status: "viewing" },
+      };
+    }
+    case "POST_MOVIE_FAILED": {
+      return {
+        ...state,
+        selectedMovie: {
+          ...state.selectedMovie,
+          status: "error",
+          error: action.error,
+        },
+      };
+    }
+    case "ACCEPT_APOLOGY": {
+      return {
+        ...state,
+        selectedMovie: {
+          ...state.selectedMovie,
+          status: "viewing",
+          error: null,
+        },
       };
     }
     default:

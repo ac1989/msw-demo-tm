@@ -11,7 +11,10 @@
   width: 100%;
 }
 
-.movie-description > p {
+.movie-description-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   margin-top: 12px;
 }
 
@@ -24,6 +27,7 @@
 }
 
 .movie-options > * {
+  margin-top: 8px;
   margin-left: 8px;
 }
 
