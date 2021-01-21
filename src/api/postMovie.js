@@ -6,6 +6,7 @@ export async function postMovie(movie) {
       "Content-Type": "application/json",
     },
   });
-  const json = await response.json();
-  return json;
+  const body = await response.json();
+
+  return { status: response.status, body };
 }
