@@ -1,7 +1,7 @@
 import React from "react";
 import "./Movies.css";
 import { Movie } from "./Movie";
-import { useMoviesContext } from "./App";
+import { useMoviesContext } from "../context/movies";
 
 export function MovieCard({ movie, handleClick }) {
   const { title, poster } = movie;
