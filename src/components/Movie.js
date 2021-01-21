@@ -27,7 +27,7 @@ export function Movie() {
     if (errors && errors[movie.id]) {
       setStatus("ERROR");
     }
-  }, [errors]);
+  }, [errors, movie.id]);
 
   async function saveMovie() {
     setStatus("SAVING");
