@@ -1,7 +1,7 @@
 import React from "react";
 import "./Movie.css";
 import { MovieCard } from "./Movies";
-import { useMoviesContext } from "./App";
+import { useMoviesContext } from "../context/movies";
 
 function MovieOptions({ actions }) {
   return (
