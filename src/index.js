@@ -7,7 +7,7 @@ import App from "./App";
  * !DEMO
  * - Include and start the worker for relevant environments;
  */
-if (process.env.NODE_ENV === "development") {
+if (process.env.REACT_APP_USE_MSW === "1") {
   const { worker } = require("./mocks/browser");
   worker.start();
 }
