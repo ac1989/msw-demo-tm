@@ -1,6 +1,6 @@
 import React from "react";
 import "./DevTool.css";
-import { movies } from "../mocks/data";
+import { movies, altMovies } from "../mocks/data";
 import { setupDb } from "../mocks/db";
 import { useMoviesContext } from "../context/movies";
 
@@ -12,9 +12,15 @@ export function DevTool() {
     fetchMovies();
   }
 
+  function useAltMovies() {
+    setupDb(altMovies);
+    fetchMovies();
+  }
+
   return (
     <div className="dev-tool">
       <button onClick={resetDb}>reset app</button>
+      <button onClick={useAltMovies}>use alt movies</button>
     </div>
   );
 }
