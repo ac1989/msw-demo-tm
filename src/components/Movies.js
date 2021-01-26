@@ -21,6 +21,7 @@ export function Movies() {
     state: { status, movies, selectedMovie },
     fetchMovies,
     selectMovie,
+    deselectMovie,
     updateMovie,
   } = useMoviesContext();
 
@@ -51,7 +52,7 @@ export function Movies() {
           <nav
             style={{ width: "100%", maxWidth: "960px", marginBottom: "24px" }}
           >
-            <button onClick={() => selectMovie(null)}>{"< Back"}</button>
+            <button onClick={deselectMovie}>{"< Back"}</button>
           </nav>
 
           <Movie movie={selectedMovie} onMovieUpdate={updateMovie} />

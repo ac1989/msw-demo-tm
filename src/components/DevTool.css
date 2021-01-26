@@ -1,0 +1,17 @@
+.dev-tool {
+  position: fixed;
+  width: 100vw;
+  padding: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(102, 51, 144, 1) 0%,
+    rgba(106, 90, 205, 1) 50%,
+    rgba(142, 69, 133, 1) 100%
+  );
+}
+
+.dev-tool > button {
+  padding: 4px 8px;
+  font-family: monospace;
+  margin-right: 8px;
+}

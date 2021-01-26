@@ -16,32 +16,19 @@ function MovieOptions({ actions }) {
 }
 
 export function Movie() {
-  const { state, updateMovie, clearError } = useMoviesContext();
-  const { selectedMovie: movie, errors } = state;
-  const { releaseDate, title, tagLine } = movie;
-
-  const [status, setStatus] = React.useState("VIEWING");
+  const {
+    state,
+    updateMovie,
+    toggleMovieEditing,
+    acceptApology,
+  } = useMoviesContext();
+  const { selectedMovie: movie } = state;
+  const { releaseDate, title, tagLine, status } = movie;
   const [editText, setEditText] = React.useState(tagLine);
 
-  React.useEffect(() => {
-    if (errors && errors[movie.id]) {
-      setStatus("ERROR");
-    }
-  }, [errors]);
-
-  async function saveMovie() {
-    setStatus("SAVING");
-    await updateMovie({ ...movie, tagLine: editText });
-    setStatus("VIEWING");
-  }
-
   function handleEditClick() {
+    toggleMovieEditing();
     setEditText(tagLine);
-    setStatus("EDITING");
-  }
-
-  if (status === "LOADING") {
-    return <h3>LOADING...</h3>;
   }
 
   return (
@@ -54,51 +41,48 @@ export function Movie() {
           Released: {new Date(releaseDate).toLocaleDateString()}
         </span>
 
-        {status === "ERROR" && (
-          <>
-            <h3>
-              Error: {errors[movie.id].error}
-              <button
-                onClick={() => {
-                  setStatus("VIEWING");
-                  clearError(movie.id);
-                }}
-              >
-                ok i'm sorry
-              </button>
-            </h3>
-          </>
-        )}
+        <div className="movie-description-content">
+          {status === "error" && (
+            <>
+              <h3>Error: {movie.error}</h3>
+              <MovieOptions
+                actions={[{ text: "ok im sorry", onClick: acceptApology }]}
+              />
+            </>
+          )}
 
-        {status === "VIEWING" && (
-          <>
-            <p>{tagLine}</p>
-            <MovieOptions
-              actions={[{ text: "Edit Description", onClick: handleEditClick }]}
-            />
-          </>
-        )}
+          {status === "viewing" && (
+            <>
+              <p>{tagLine}</p>
+              <MovieOptions
+                actions={[
+                  { text: "Edit Description", onClick: handleEditClick },
+                ]}
+              />
+            </>
+          )}
 
-        {status === "EDITING" && (
-          <>
-            <textarea
-              className="edit-description"
-              onChange={(e) => setEditText(e.target.value)}
-              value={editText}
-            />
-            <MovieOptions
-              actions={[
-                { text: "Cancel", onClick: () => setStatus("VIEWING") },
-                {
-                  text: "Save",
-                  onClick: () => saveMovie({ ...movie, tagLine: editText }),
-                },
-              ]}
-            />
-          </>
-        )}
+          {status === "editing" && (
+            <>
+              <textarea
+                className="edit-description"
+                onChange={(e) => setEditText(e.target.value)}
+                value={editText}
+              />
+              <MovieOptions
+                actions={[
+                  { text: "Cancel", onClick: toggleMovieEditing },
+                  {
+                    text: "Save",
+                    onClick: () => updateMovie({ ...movie, tagLine: editText }),
+                  },
+                ]}
+              />
+            </>
+          )}
 
-        {status === "SAVING" && <h3>SAVING...</h3>}
+          {status === "saving" && <h3>SAVING...</h3>}
+        </div>
       </div>
     </div>
   );

@@ -9,15 +9,25 @@ export const useMoviesContext = () => {
 
   const fetchMovies = React.useCallback(async () => {
     dispatch({ type: "FETCH_MOVIES" });
-    const { body: movies } = await api.fetchMovies();
-    dispatch({ type: "FETCH_MOVIES_SUCCESS", movies });
+
+    const { status, body: movies } = await api.fetchMovies();
+
+    if (status === 200) {
+      dispatch({ type: "FETCH_MOVIES_SUCCESS", movies });
+    }
+
+    if (status !== 200) {
+      // system shock
+    }
   }, [dispatch]);
 
   async function updateMovie(movie) {
+    dispatch({ type: "POST_MOVIE" });
+
     const { status, body } = await api.postMovie(movie);
 
     if (status === 200) {
-      dispatch({ type: "UPDATE_MOVIE", movie });
+      dispatch({ type: "POST_MOVIE_SUCCESS", movie });
     }
 
     if (status !== 200) {
@@ -33,11 +43,27 @@ export const useMoviesContext = () => {
     dispatch({ type: "SELECT_MOVIE", movie });
   }
 
-  function clearError(movieId) {
-    dispatch({ type: "CLEAR_ERROR", movieId });
+  function deselectMovie() {
+    dispatch({ type: "DESELECT_MOVIE" });
   }
 
-  return { state, fetchMovies, selectMovie, updateMovie, clearError };
+  function toggleMovieEditing() {
+    dispatch({ type: "TOGGLE_MOVIE_EDITING" });
+  }
+
+  function acceptApology() {
+    dispatch({ type: "ACCEPT_APOLOGY" });
+  }
+
+  return {
+    state,
+    fetchMovies,
+    selectMovie,
+    deselectMovie,
+    updateMovie,
+    toggleMovieEditing,
+    acceptApology,
+  };
 };
 
 export function MoviesProvider({ children }) {
