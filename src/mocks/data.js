@@ -51,3 +51,27 @@ export const altMovies = [
       "An exploration of how the events of individual basin clients impact one another in the past, present and future.",
   },
 ];
+
+export const otherMovies = [
+  {
+    id: "123",
+    poster: "slateblue",
+    title: "G 🚀",
+    releaseDate: "2021-00-29T00:00:00.000Z",
+    tagLine: "TO",
+  },
+  {
+    id: "456",
+    poster: "plum",
+    title: "M 🚀",
+    releaseDate: "2021-00-29T00:00:00.000Z",
+    tagLine: "THE",
+  },
+  {
+    id: "789",
+    poster: "rebeccapurple",
+    title: "E 🚀",
+    releaseDate: "2021-00-29T00:00:00.000Z",
+    tagLine: "MOON 🚀",
+  },
+];
