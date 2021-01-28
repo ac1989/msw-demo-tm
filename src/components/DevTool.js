@@ -8,7 +8,7 @@ export function DevTool() {
   const { fetchMovies } = useMoviesContext();
 
   function resetDb() {
-    setupDb(data.movies);
+    setupDb();
     fetchMovies();
   }
 
