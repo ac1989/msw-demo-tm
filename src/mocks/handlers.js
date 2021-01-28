@@ -1,15 +1,14 @@
 import { rest } from "msw";
-import { getAll, getItemById, updateItem } from "./db";
+import { getAll, updateItem, setupDb } from "./db";
+
+if (!getAll()) {
+  setupDb();
+}
 
 export const handlers = [
   rest.get("/movies", (_, res, ctx) => {
     const movies = getAll();
     return res(ctx.status(200), ctx.json(movies));
-  }),
-
-  rest.get("/movie", (req, res, ctx) => {
-    const movie = getItemById(req.params.id);
-    return res(ctx.status(200), ctx.json(movie));
   }),
 
   rest.post("/movie", (req, res, ctx) => {

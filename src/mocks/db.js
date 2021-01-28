@@ -1,15 +1,11 @@
-export function setupDb(movies) {
-  localStorage.setItem("movies", JSON.stringify([...movies]));
+import { movies } from "./data";
+
+export function setupDb(data = movies) {
+  localStorage.setItem("movies", JSON.stringify([...data]));
 }
 
 export function getAll() {
   return JSON.parse(localStorage.getItem("movies"));
-}
-
-export function getItemById(id) {
-  return JSON.parse(
-    localStorage.getItem("movies").find((movie) => movie.id === id)
-  );
 }
 
 export function updateItem(movie) {
