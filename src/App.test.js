@@ -2,11 +2,6 @@ import React from "react";
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
-import { setupDb } from "../src/mocks/db";
-
-beforeAll(() => {
-  setupDb();
-});
 
 test("loads movies", async () => {
   render(<App />);
